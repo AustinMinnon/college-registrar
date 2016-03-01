@@ -1,0 +1,50 @@
+<h1>$category.getName()</h1>
+
+#if($category.getTasks())
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Here are the tasks for this category:</h3>
+      <form action="/completed" method="post">
+        <input id="category_id" name="category_id" type="hidden" value="$category.getId()">
+        #foreach($task in $category.getTasks())
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="completedTask" value="$task.getId()" id="task$task.getId()">
+            $task.getDescription()
+          </label>
+        </div>
+        #end
+        <button type="submit" id="taskComplete" class="btn btn-success">Mark Completed</button>
+
+      </form>
+
+
+    </div>
+    <div class="col-md-6">
+      <h3>Completed Tasks:</h3>
+      <ul class="list-group">
+        #foreach($task in $category.getCompletedTasks())
+          <li class="list-group-item">$task.getDescription()</li>
+        #end
+      </ul>
+    </div>
+  </div>
+
+#end
+
+<h4>Add a task to this category:</h4>
+
+<form action='/add_tasks' method='post'>
+    <input id="category_id" name="category_id" type="hidden" value="$category.getId()">
+    <label for="task_id">Select a task</label>
+    <select id='task_id' name='task_id' type='text'>
+      #foreach($task in $allTasks)
+        <option value="$task.getId()"> $task.getDescription() </option>
+      #end
+    </select>
+    <button type='submit'>Add task</button>
+</form>
+
+<p><a href="/categories/$category.getId()/edit">Edit this category</a></p>
+
+<p><a href='/'>Home</a></p>
