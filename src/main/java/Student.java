@@ -67,4 +67,31 @@ public boolean equals(Object otherStudent){
     }
   }
 
+  public void addCourse(Course course) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "INSERT INTO students_courses (course_id, student_id) VALUES (:course_id, :student_id)";
+      con.createQuery(sql)
+      .addParameter("student_id",this.getId())
+      .addParameter("course_id", course.getId())
+      .executeUpdate();
+    }
+  }
+
+  public List<Course> getCourses() {
+    try(Connection con = DB.sql2o.open()){
+    String sql = "SELECT courses.* FROM students JOIN students_courses ON (students.id = students_courses.student_id) JOIN courses ON (students_courses.course_id = courses.id) WHERE students.id = :student_id;";
+      return con.createQuery(sql)
+      .addParameter("student_id", this.getId())
+      .executeAndFetch(Course.class);
+    }
+  }
+
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String deleteQuery = "DELETE FROM students WHERE id = :id;";
+        con.createQuery(deleteQuery)
+          .addParameter("id", id)
+          .executeUpdate();
+    }
+  }
 }

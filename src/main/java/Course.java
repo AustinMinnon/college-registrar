@@ -79,5 +79,14 @@ public class Course {
         .executeAndFetch(Student.class);
     }
   }
+
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String deleteQuery = "DELETE FROM courses WHERE id = :id;";
+      con.createQuery(deleteQuery)
+      .addParameter("id", id)
+      .executeUpdate();
+      // "DELETE FROM students_courses WHERE student_id NOT IN (SELECT student_id FROM students)";
+    }
+  }
 }
-// SELECT students.* FROM courses JOIN students_courses ON (courses.id = students_courses.course_id) JOIN students ON (students_courses.student_id = students.id) WHERE courses.id = 1;
