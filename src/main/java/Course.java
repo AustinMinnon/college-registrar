@@ -73,7 +73,7 @@ public class Course {
 
   public List<Student> getStudents() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT students.* FROM courses JOIN students_courses ON (courses.id = students_courses.course_id) JOIN students ON (students_courses.student_id = students.id) WHERE courses.id = :course_id;";
+      String sql = "SELECT DISTINCT students.* FROM courses JOIN students_courses ON (courses.id = students_courses.course_id) JOIN students ON (students_courses.student_id = students.id) WHERE courses.id = :course_id;";
         return con.createQuery(sql)
         .addParameter("course_id", this.getId())
         .executeAndFetch(Student.class);
